@@ -226,14 +226,15 @@ def get_gsheet_client():
     if "gcp_service_account" in st.secrets:
         import json
         
-        # Get the raw secret string
         raw_secret_string = st.secrets["gcp_service_account"]
-        
-        # Replace literal newlines with escaped newlines in the raw string
-        # This is a common issue when copying multi-line secrets into single-line string fields
-        # It's safer to replace all newlines in the entire string before parsing
-        # as the private_key is the most likely culprit.
+        st.write("--- DEBUG: raw secret string from st.secrets ---")
+        st.write(repr(raw_secret_string)) # Use repr to see all escapes
+        st.write("--- DEBUG: end raw secret string ---")
+
         processed_secret_string = raw_secret_string.replace('\n', '\\n')
+        st.write("--- DEBUG: processed secret string (newlines escaped) ---")
+        st.write(repr(processed_secret_string)) # Use repr to see all escapes
+        st.write("--- DEBUG: end processed secret string ---")
         
         info = json.loads(processed_secret_string)
         creds = Credentials.from_service_account_info(info, scopes=SCOPES)
@@ -432,3 +433,28 @@ def main_ui():
 
 if __name__ == "__main__":
     main_ui()
+
+</final_file_content>
+
+IMPORTANT: For any future changes to this file, use the final_file_content shown above as your reference. This content reflects the current state of the file, including any auto-formatting (e.g., if you used single quotes but the formatter converted them to double quotes). Always base your SEARCH/REPLACE operations on this final version to ensure accuracy.
+
+<environment_details>
+# VSCode Visible Files
+shift_app.py
+
+# VSCode Open Tabs
+doctors.yaml
+.gitignore
+requirements.txt
+holidays.yaml
+shift_app.py
+
+# Current Time
+5/31/2025, 11:10:14 PM (Europe/Bucharest, UTC+3:00)
+
+# Context Window Usage
+180,707 / 1,048.576K tokens used (17%)
+
+# Current Mode
+ACT MODE
+</environment_details>
