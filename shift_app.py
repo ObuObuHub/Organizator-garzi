@@ -225,8 +225,19 @@ def get_gsheet_client():
     # Dacă am pus secretul în Streamlit Cloud, îl luăm de acolo
     if "gcp_service_account" in st.secrets:
         import json
-        info = json.loads(st.secrets["gcp_service_account"])
-        creds = Credentials.from_service_account_info(info, scopes=SCOPES)
+
+        # ==== START DEBUG ====
+        st.write("--- DEBUG: raw secret string begin ---")
+        st.write(st.secrets["gcp_service_account"]) # Print raw string directly
+        st.write("--- DEBUG: raw secret string end ---")
+        # ==== END DEBUG ====
+
+        # Temporarily commented out JSON parsing and credential creation
+        # info = json.loads(st.secrets["gcp_service_account"])
+        # creds = Credentials.from_service_account_info(info, scopes=SCOPES)
+        
+        st.error("JSONDecodeError: Secret format is incorrect. Please provide the raw secret string from above.")
+        raise Exception("Secret format error, cannot proceed with Google Sheets authentication.")
     else:
         # fallback local, dacă vrei să testezi cu gcreds.json
         creds = Credentials.from_service_account_file(CRED_FILE, scopes=SCOPES)
