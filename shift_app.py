@@ -305,6 +305,8 @@ def load_holidays() -> List[dt.date]:
 
 def main_ui():
     st.title("Organizator gărzi")
+    info = st.secrets["gcp_service_account"]
+    st.write("GCP Service Account Info:", info)
 
     # Selectăm anul și luna (implicit: luna curentă)
     today = dt.date.today()
