@@ -9,6 +9,7 @@ from collections import defaultdict
 import yaml
 from pathlib import Path
 
+import os
 import json
 import pandas as pd
 import streamlit as st
@@ -305,6 +306,22 @@ def load_holidays() -> List[dt.date]:
 
 def main_ui():
     st.title("Organizator gărzi")
+
+    # === DEBUG: afișează directorul curent și listarea lui ===
+    st.write("🛠️ [DEBUG] current working directory (os.getcwd()):", os.getcwd())
+    st.write("🛠️ [DEBUG] conținut director curent (os.listdir):", os.listdir(os.getcwd()))
+
+    # === DEBUG: verifică dacă există subfolder .streamlit și ce fișiere are ===
+    if os.path.isdir(".streamlit"):
+        st.write("✅ [DEBUG] există folder .streamlit, conținut:", os.listdir(".streamlit"))
+    else:
+        st.write("❌ [DEBUG] NU există folder .streamlit în acest director!")
+
+    # === DEBUG: afișează conținutul curent al st.secrets ===
+    st.write("🔑 [DEBUG] st.secrets:", st.secrets)
+
+    # Oprește restul aplicației, ca să vezi doar datele de debug
+    st.stop()
 
     # Selectăm anul și luna (implicit: luna curentă)
     today = dt.date.today()
