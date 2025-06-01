@@ -208,41 +208,16 @@ SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive.file",
 ]
-CRED_FILE = "gcreds.json"  # puneți fișierul service-account aici
-
 @st.cache_resource(show_spinner=False)
 def get_gsheet_client():
     SCOPES = [
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive.file",
     ]
-
-    if "gcp_service_account" in st.secrets:
-        # Case A: You put the entire service‐account JSON as nested TOML keys:
-        #   [gcp_service_account]
-        #   type = "service_account"
-        #   project_id = "…"
-        #   private_key_id = "…"
-        #   private_key = "-----BEGIN PRIVATE KEY-----\n…\n-----END PRIVATE KEY-----\n"
-        #   …
-        # In that scenario, st.secrets["gcp_service_account"] is already a dict:
-        info_candidate = st.secrets["gcp_service_account"]
-        if isinstance(info_candidate, dict):
-            creds = Credentials.from_service_account_info(info_candidate, scopes=SCOPES)
-        else:
-            # Case B: You stored one big JSON‐string under a key, e.g.
-            #   [gcp_service_account]
-            #   json = "{ \"type\": \"service_account\", … }"
-            try:
-                info = json.loads(info_candidate)
-                creds = Credentials.from_service_account_info(info, scopes=SCOPES)
-            except Exception as e:
-                st.error("GCP credential in secrets is not valid JSON.")
-                st.stop()
-    else:
-        # Fallback to local file “gcreds.json”
-        creds = Credentials.from_service_account_file(CRED_FILE, scopes=SCOPES)
-
+    # Directly access the credentials dictionary from st.secrets.
+    # The previous steps ensured 'gcp_service_account' is now a dict.
+    info = st.secrets["gcp_service_account"]
+    creds = Credentials.from_service_account_info(info, scopes=SCOPES)
     return gspread.authorize(creds)
 
 @st.cache_resource(show_spinner=False)
